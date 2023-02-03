@@ -11,10 +11,6 @@ public class Task {
         return (isDone ? "x" : " "); // mark x if isDone is true, space if false
     }
 
-    public void markAsDone() {
-        this.isDone = true;
-    }
-
     public String toString() {
         return ("[" + this.getStatusIcon() + "] " + description);
     }
