@@ -17,14 +17,15 @@ public class Duke {
             line = response.nextLine();
             String[] lines = line.trim().split(" ", 2);
             String command = lines[0];
+            if (line.equals("bye")) {
+                break;
+            }
             if (line.equals("list")) {
                 System.out.println("...\n" + "Here are the tasks in your list:");
                 for (int i = 1; i < counter; i++) {
                     System.out.println(i + "." + items[i]);
                 }
                 continue;
-            } else if (line.equals("bye")) {
-                break;
             }
             String arguments = lines[1];
             if (command.equals("mark")) {
@@ -44,21 +45,32 @@ public class Duke {
                     System.out.println("Please input a valid index!");
                 }
             } else if (command.equals("todo")) {
-                Todo newTodo = new Todo(line.substring(5));
+                Todo newTodo = new Todo(arguments);
                 items[counter] = newTodo;
                 counter++;
             } else if (command.equals("event")) {
-                String eventSubstring = line.trim().substring(6);
-                String[] eventInfo = eventSubstring.split("/from ");
-                String[] eventDuration = eventInfo[1].split("/to ");
-                Event newEvent = new Event(eventInfo[0], eventDuration[0], eventDuration[1]);
-                items[counter] = newEvent;
-                counter++;
+                try {
+                    String[] eventInfo = arguments.split("/from ");
+                    if (eventInfo.length < 2) {
+                        throw new DukeException("There's missing information.");
+                    }
+                    String[] eventDuration = eventInfo[1].split("/to ");
+                    if (eventDuration.length < 2) {
+                        throw new DukeException("There's missing information.");
+                    }
+                    Event newEvent = new Event(eventInfo[0], eventDuration[0], eventDuration[1]);
+                    items[counter] = newEvent;
+                    counter++;
+                } catch (IndexOutOfBoundsException e){
+                    System.out.println("There's some missing information.");
+                } catch (DukeException e) {
+                    System.out.println(e.getMessage());
+                }
             } else if (command.equals("deadline")) {
                 try {
                     String[] deadlineInfo = arguments.split("/by ");
                     if (deadlineInfo.length < 2) {
-                        throw new DukeException("There's missing information. Did you miss out the description or the deadline?");
+                        throw new DukeException("There's missing information.");
                     }
                     Deadline newDeadline = new Deadline(deadlineInfo[0], deadlineInfo[1]);
                     items[counter] = newDeadline;
