@@ -3,8 +3,6 @@ import exceptions.DukeException;
 import java.util.Scanner;
 
 public class Duke {
-//    1) check for sufficient arguments
-//    2) check for /by etc
 
     public static void main(String[] args) {
         System.out.println("Hello, I'm Duke!\n" + "What would you like to do today?");
