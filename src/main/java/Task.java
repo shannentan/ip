@@ -8,7 +8,7 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return (isDone ? "x" : " "); // mark x if isDone is true, space if false
+        return (isDone ? "x" : " ");
     }
 
     public String toString() {
