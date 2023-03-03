@@ -1,16 +1,20 @@
 import exceptions.DukeException;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
-//    1) check for sufficient arguments
-//    2) check for /by etc
+    static String openingMessage = "Hello, I'm Duke!\n" + "What would you like to do today?";
+
+    static String closingMessage = "Bye! Have a nice day:D";
+
+    static String invalidIndexErrorMessage = "Please input a valid index!";
 
     public static void main(String[] args) {
-        System.out.println("Hello, I'm Duke!\n" + "What would you like to do today?");
+        System.out.println(openingMessage);
         Scanner response = new Scanner(System.in);
-        int counter = 1;
-        Task[] items = new Task[101]; // 1-based
+        int counter = 0;
+        ArrayList<Task> items = new ArrayList<Task>();
         String line = "";
 
         while (!(line.equals("bye"))) {
@@ -22,47 +26,48 @@ public class Duke {
             }
             if (line.equals("list")) {
                 System.out.println("...\n" + "Here are the tasks in your list:");
-                for (int i = 1; i < counter; i++) {
-                    System.out.println(i + "." + items[i]);
+                for (int i = 0; i < counter; i++) {
+                    System.out.println((i + 1) + "." + items.get(i));
                 }
                 continue;
             }
             String arguments = lines[1];
+            String missingInfoErrorMessage = "There's missing information. What would you like to do today?";
             if (command.equals("mark")) {
                 try {
-                    int index = Integer.parseInt(arguments);
-                    items[index].isDone = true;
-                    System.out.println("...\n" + "Nice! I've marked this task as done:\n" + items[index]);
+                    int index = Integer.parseInt(arguments) - 1;
+                    items.get(index).isDone = true;
+                    System.out.println("...\n" + "Nice! I've marked this task as done:\n" + items.get(index));
                 } catch (NumberFormatException e) {
-                    System.out.println("Please input a valid index!");
+                    System.out.println(invalidIndexErrorMessage);
                 }
             } else if (command.equals("unmark")) {
                 try {
-                    int index = Integer.parseInt(arguments);
-                    items[index].isDone = false;
-                    System.out.println("...\n" + "OK, I've marked this task as not done yet:\n" + items[index]);
+                    int index = Integer.parseInt(arguments) - 1;
+                    items.get(index).isDone = false;
+                    System.out.println("...\n" + "OK, I've marked this task as not done yet:\n" + items.get(index));
                 } catch (NumberFormatException e) {
-                    System.out.println("Please input a valid index!");
+                    System.out.println(invalidIndexErrorMessage);
                 }
             } else if (command.equals("todo")) {
                 Todo newTodo = new Todo(arguments);
-                items[counter] = newTodo;
+                items.add(newTodo);
                 counter++;
             } else if (command.equals("event")) {
                 try {
                     String[] eventInfo = arguments.split("/from ");
                     if (eventInfo.length < 2) {
-                        throw new DukeException("There's missing information.");
+                        throw new DukeException(missingInfoErrorMessage);
                     }
                     String[] eventDuration = eventInfo[1].split("/to ");
                     if (eventDuration.length < 2) {
-                        throw new DukeException("There's missing information.");
+                        throw new DukeException(missingInfoErrorMessage);
                     }
                     Event newEvent = new Event(eventInfo[0], eventDuration[0], eventDuration[1]);
-                    items[counter] = newEvent;
+                    items.add(newEvent);
                     counter++;
-                } catch (IndexOutOfBoundsException e){
-                    System.out.println("There's some missing information.");
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(missingInfoErrorMessage);
                 } catch (DukeException e) {
                     System.out.println(e.getMessage());
                 }
@@ -70,20 +75,29 @@ public class Duke {
                 try {
                     String[] deadlineInfo = arguments.split("/by ");
                     if (deadlineInfo.length < 2) {
-                        throw new DukeException("There's missing information.");
+                        throw new DukeException(missingInfoErrorMessage);
                     }
                     Deadline newDeadline = new Deadline(deadlineInfo[0], deadlineInfo[1]);
-                    items[counter] = newDeadline;
+                    items.add(newDeadline);
                     counter++;
-                } catch (StringIndexOutOfBoundsException e) {
-                    System.out.println("What would you like to do, and when's the deadline?");
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Remember to add /by before the deadline!");
+                    System.out.println(missingInfoErrorMessage);
                 } catch (DukeException e) {
                     System.out.println(e.getMessage());
                 }
+            } else if (command.equals("remove")) {
+                try {
+                    int index = Integer.parseInt(arguments) - 1;
+                    items.remove(index);
+                    counter--;
+                    System.out.println("Okay, I've removed task " + (index + 1));
+                } catch (NumberFormatException e) {
+                    System.out.println(invalidIndexErrorMessage);
+                }
+            } else {
+                System.out.println("Sorry, I don't understand that.");
             }
         }
-        System.out.println("Bye! Have a nice day:D");
+        System.out.println(closingMessage);
     }
 }
