@@ -9,9 +9,7 @@ public class Duke {
     public static void main(String[] args) throws IOException {
 
         Storage storage = new Storage();
-        TaskList taskList = new TaskList();
         Ui ui = new Ui();
-        Parser parser = new Parser();
 
         storage.loadFromFile(TaskList.items);
 

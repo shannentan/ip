@@ -68,4 +68,27 @@ public class Parser {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void findKeywords(ArrayList<Task> items, String arguments) {
+        boolean isMessagePrinted = false;
+        boolean isKeywordFound = false;
+        String[] keywords = arguments.split(" ");
+        for (int i = 0; i < items.size(); i ++) {
+            for (String keyword : keywords) {
+                String taskDescription = items.get(i).description;
+                if (taskDescription.contains(keyword)) {
+                    isKeywordFound = true;
+                    if (!isMessagePrinted) {
+                        System.out.println("Here are the matching tasks in your list:");
+                        isMessagePrinted = true;
+                    }
+                    System.out.println((i + 1) + "." + items.get(i));
+                    break;
+                }
+            }
+        }
+        if (!isKeywordFound) {
+            System.out.println("Sorry, there are no such tasks.");
+        }
+    }
 }
