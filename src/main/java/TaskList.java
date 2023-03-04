@@ -10,11 +10,22 @@ import static messages.newTaskMessages.MESSAGE_CREATE_NEW_TODO;
 public class TaskList extends ArrayList<Task> {
     public static ArrayList<Task> items = new ArrayList<>();
 
+    /**
+     * creates a new Todo task
+     * @param arguments String containing description of task to be added
+     * @return a Todo task
+     */
     public static Task createNewTodo(String arguments) {
         System.out.println(MESSAGE_CREATE_NEW_TODO + arguments);
         return new Todo(arguments);
     }
 
+    /**
+     * creates a new Event task
+     * @param arguments String containing description, start and end date and/or time of task to be added
+     * @return an Event task
+     * @throws DukeException
+     */
     public static Task createNewEvent(String arguments) throws DukeException {
         try {
             String[] eventInfo = arguments.split("/from ");
