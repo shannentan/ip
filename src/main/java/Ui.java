@@ -32,6 +32,8 @@ public class Ui {
                 Parser.addNewDeadline(items, arguments);
             } else if (command.equals("remove")) {
                 Parser.removeTask(items, arguments);
+            } else if (command.equals("find")) {
+                Parser.findKeywords(items, arguments);
             } else {
                 System.out.println(MESSAGE_INVALID_COMMAND);
                 continue;
