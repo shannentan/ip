@@ -12,6 +12,7 @@ public class TaskList extends ArrayList<Task> {
 
     /**
      * creates a new Todo task
+     *
      * @param arguments String containing description of task to be added
      * @return a Todo task
      */
@@ -22,9 +23,10 @@ public class TaskList extends ArrayList<Task> {
 
     /**
      * creates a new Event task
+     *
      * @param arguments String containing description, start and end date and/or time of task to be added
      * @return an Event task
-     * @throws DukeException
+     * @throws DukeException if there are arguments missing
      */
     public static Task createNewEvent(String arguments) throws DukeException {
         try {
@@ -38,12 +40,18 @@ public class TaskList extends ArrayList<Task> {
             }
             System.out.println(MESSAGE_CREATE_NEW_EVENT + eventInfo[0] + "(from: " + eventDuration[0] + " to: " + eventDuration[1] + ")");
             return new Event(eventInfo[0], eventDuration[0], eventDuration[1]);
-
         } catch (IndexOutOfBoundsException e) {
             throw new DukeException(MESSAGE_MISSING_INFO_ERROR);
         }
     }
 
+    /**
+     * creates a new Deadline task
+     *
+     * @param arguments String containing description, and due date and/or time of task to be added
+     * @return a Deadline task
+     * @throws DukeException if there are arguments missing
+     */
     public static Task createNewDeadline(String arguments) throws DukeException {
         String[] deadlineInfo = arguments.split("/by ");
         if (deadlineInfo.length < 2) {

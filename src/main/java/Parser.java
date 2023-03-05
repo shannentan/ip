@@ -3,14 +3,17 @@ import exceptions.DukeException;
 import java.util.ArrayList;
 
 import static messages.ErrorMessages.MESSAGE_INVALID_INDEX_ERROR;
-import static messages.operationalMessages.MESSAGE_MARK_TASK;
 import static messages.operationalMessages.MESSAGE_UNMARK_TASK;
+import static messages.operationalMessages.MESSAGE_MARK_TASK;
 import static messages.operationalMessages.MESSAGE_REMOVE_TASK;
+import static messages.operationalMessages.MESSAGE_NO_MATCHING_TASK;
+import static messages.operationalMessages.MESSAGE_MATCHING_TASK;
 
 public class Parser {
 
     /**
      * prints out all the items in the list of tasks
+     *
      * @param items ArrayList of Tasks containing all the task items added
      */
     public static void displayList(ArrayList<Task> items) {
@@ -22,7 +25,8 @@ public class Parser {
 
     /**
      * marks a task as done
-     * @param items ArrayList of Tasks containing all the task items added
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
      * @param arguments String containing a number that is one more than the index of the task to be marked as done
      */
     public static void markTask(ArrayList<Task> items, String arguments) {
@@ -37,7 +41,8 @@ public class Parser {
 
     /**
      * unmarks a task as done
-     * @param items ArrayList of Tasks containing all the task items added
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
      * @param arguments String containing a number that is one more than the index of the task to be unmarked
      */
     public static void unmarkTask(ArrayList<Task> items, String arguments) {
@@ -52,7 +57,8 @@ public class Parser {
 
     /**
      * removes a task from items
-     * @param items ArrayList of Tasks containing all the task items added
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
      * @param arguments String containing a number that is one more than the index of the task to be removed
      */
     public static void removeTask(ArrayList<Task> items, String arguments) {
@@ -67,7 +73,8 @@ public class Parser {
 
     /**
      * adds a new Todo task to items
-     * @param items ArrayList of Tasks containing all the task items added
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
      * @param arguments String containing description of Todo to be added
      */
     public static void addNewTodo(ArrayList<Task> items, String arguments) {
@@ -77,7 +84,8 @@ public class Parser {
 
     /**
      * adds a new Event task to items
-     * @param items ArrayList of Tasks containing all the task items added
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
      * @param arguments String containing description of Event to be added
      */
     public static void addNewEvent(ArrayList<Task> items, String arguments) {
@@ -91,7 +99,8 @@ public class Parser {
 
     /**
      * adds a new Deadline task to items
-     * @param items ArrayList of Tasks containing all the task items added
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
      * @param arguments String containing description of Deadline to be added
      */
     public static void addNewDeadline(ArrayList<Task> items, String arguments) {
@@ -103,26 +112,46 @@ public class Parser {
         }
     }
 
-    public static void findKeywords(ArrayList<Task> items, String arguments) {
-        boolean isMessagePrinted = false;
-        boolean isKeywordFound = false;
-        String[] keywords = arguments.split(" ");
-        for (int i = 0; i < items.size(); i ++) {
+    /**
+     * finds matching tasks from the task list
+     *
+     * @param items    ArrayList of Tasks containing all the task items added
+     * @param keywords Array of Strings of keywords to be checked for matches
+     * @return ArrayList of indexes of matching tasks
+     */
+    public static ArrayList<Integer> findMatchingTasks(ArrayList<Task> items, String[] keywords) {
+        ArrayList<Integer> matchingTaskIndex = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
             for (String keyword : keywords) {
-                String taskDescription = items.get(i).description;
-                if (taskDescription.contains(keyword)) {
-                    isKeywordFound = true;
-                    if (!isMessagePrinted) {
-                        System.out.println("Here are the matching tasks in your list:");
-                        isMessagePrinted = true;
-                    }
-                    System.out.println((i + 1) + "." + items.get(i));
-                    break;
+                if (items.get(i).description.contains(keyword)) {
+                    matchingTaskIndex.add(i);
                 }
             }
         }
+        return matchingTaskIndex;
+    }
+
+    /**
+     * prints matching tasks from the task list
+     *
+     * @param items     ArrayList of Tasks containing all the task items added
+     * @param arguments String of keywords to be checked for matches
+     */
+    public static void printMatchingTasks(ArrayList<Task> items, String arguments) {
+        boolean isMessagePrinted = false;
+        boolean isKeywordFound = false;
+        String[] keywords = arguments.split(" ");
+        ArrayList<Integer> matchingTasks = findMatchingTasks(items, keywords);
+        for (int matchingTaskIndex : matchingTasks) {
+            isKeywordFound = true;
+            if (!isMessagePrinted) {
+                System.out.println(MESSAGE_MATCHING_TASK);
+                isMessagePrinted = true;
+            }
+            System.out.println((matchingTaskIndex + 1) + "." + items.get(matchingTaskIndex));
+        }
         if (!isKeywordFound) {
-            System.out.println("Sorry, there are no such tasks.");
+            System.out.println(MESSAGE_NO_MATCHING_TASK);
         }
     }
 }

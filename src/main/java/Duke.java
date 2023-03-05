@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -12,8 +11,6 @@ public class Duke {
         Ui ui = new Ui();
 
         storage.loadFromFile(TaskList.items);
-
-        File f = new File("data/Duke.txt");
 
         System.out.println(MESSAGE_OPENING);
         Scanner response = new Scanner(System.in);

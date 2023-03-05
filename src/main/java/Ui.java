@@ -6,6 +6,15 @@ import static messages.ErrorMessages.MESSAGE_INVALID_COMMAND;
 import static messages.operationalMessages.MESSAGE_CLOSING;
 
 public class Ui {
+
+    /**
+     * read the command calls the relevant methods
+     *
+     * @param items    ArrayList of Tasks containing all the task items added
+     * @param response Scanner object to read in inputs from user
+     * @param line     String containing input from user
+     * @throws IOException if there is errors writing to the file
+     */
     public void readInCommand(ArrayList<Task> items, Scanner response, String line) throws IOException {
         while (!(line.equals("bye"))) {
             line = response.nextLine();
@@ -33,7 +42,7 @@ public class Ui {
             } else if (command.equals("remove")) {
                 Parser.removeTask(items, arguments);
             } else if (command.equals("find")) {
-                Parser.findKeywords(items, arguments);
+                Parser.printMatchingTasks(items, arguments);
             } else {
                 System.out.println(MESSAGE_INVALID_COMMAND);
                 continue;

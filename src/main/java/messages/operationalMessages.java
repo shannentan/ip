@@ -13,4 +13,8 @@ public class operationalMessages {
 
     public static final String MESSAGE_NO_EXISTING_FILE = "...\n"
             + "There's no existing task list. I'll create a new one for you!";
+
+    public static final String MESSAGE_NO_MATCHING_TASK = "...\n" + "Sorry, there are no such tasks.";
+
+    public static final String MESSAGE_MATCHING_TASK = "...\n" + "Here are the matching tasks in your list:";
 }
